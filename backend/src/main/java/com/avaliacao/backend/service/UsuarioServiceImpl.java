@@ -27,8 +27,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public UsuarioDto save(UsuarioDto usuarioDto) {
         validarCPF(usuarioDto.getCpf());
-        if (cpfExists(usuarioDto.getCpf()))
-            throw new ArgumentException("CPF já existe no sistema");
         Usuario mae = findByNome(usuarioDto.getMae(), SexoEnum.FEMININO);
         Usuario pai = findByNome(usuarioDto.getPai(), SexoEnum.MASCULINO);
         Usuario usuario = usuarioRepository.save(EntityMapper.usuario(usuarioDto, mae, pai));
@@ -54,8 +52,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario = usuarioRepository.findById(usuarioDto.getId()).get();
         if(!usuario.getCpf().equals(usuarioDto.getCpf())) {
             validarCPF(usuarioDto.getCpf());
-            if (cpfExists(usuarioDto.getCpf()))
-                throw new ArgumentException("CPF já existe no sistema");
         }
         Usuario mae = findByNome(usuarioDto.getMae(), SexoEnum.FEMININO);
         Usuario pai = findByNome(usuarioDto.getPai(), SexoEnum.MASCULINO);
@@ -95,13 +91,13 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (cpf.length() != 11)
             throw new ArgumentException("CPF inválido!");
 
+        Usuario existingUser = usuarioRepository.findByCpf(cpf);
+        
+        if (existingUser != null )
+        throw new ArgumentException("CPF já existe no sistema");
+
         return true;
 
     } 
-
-    private boolean cpfExists(String cpf) {
-        Usuario existingUser = usuarioRepository.findByCpf(cpf);
-        return existingUser != null;
-    }
 
 }
