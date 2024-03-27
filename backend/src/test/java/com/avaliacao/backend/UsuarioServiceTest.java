@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import com.avaliacao.backend.dto.UsuarioDto;
 import com.avaliacao.backend.enums.SexoEnum;
-import com.avaliacao.backend.exception.ArgumentException;
 import com.avaliacao.backend.model.Usuario;
 import com.avaliacao.backend.repository.UsuarioRepository;
 import com.avaliacao.backend.service.UsuarioServiceImpl;
