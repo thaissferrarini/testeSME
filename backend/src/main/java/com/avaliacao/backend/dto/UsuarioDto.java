@@ -1,9 +1,8 @@
 package com.avaliacao.backend.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
 
 import com.avaliacao.backend.enums.SexoEnum;
 
@@ -28,8 +27,7 @@ public class UsuarioDto {
 
   private SexoEnum sexo;
 
-  @Past
-  private LocalDate dataNascimento;
+  private Date dataNascimento;
 
   private String pai;
 

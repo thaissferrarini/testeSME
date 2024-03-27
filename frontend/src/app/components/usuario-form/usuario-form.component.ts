@@ -19,6 +19,7 @@ export class UsuarioFormComponent implements OnInit {
   contatos = { nome: '', email: '', telefone: '' };
   cadastroContatos = [];
   mostrarCadastro = true;
+  maxDate = new Date();
   sexoOptions: SelectItem[] = [
     { label: 'MASCULINO', value: 'MASCULINO' },
     { label: 'FEMININO', value: 'FEMININO' }
@@ -38,12 +39,17 @@ export class UsuarioFormComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const userId = params['id'];
         this.verificarUsuarios(userId);
-        this.usuarioService.buscarUsuario(userId).subscribe((usuario: Usuario) => {
+        this.buscar(userId);
+      });
+      
+  }
+
+  buscar(id): void {
+    this.usuarioService.buscarUsuario(id).subscribe((usuario: Usuario) => {
           if(!usuario) {
-            this.alertService.erro(`Usuário id: ${userId} não encontrado`); 
+            this.alertService.erro(`Usuário id: ${id} não encontrado`); 
             return;
           }
-          
           this.formModel = this.fb.group({
           id: usuario.id,
           nome: usuario.nome,
@@ -53,8 +59,6 @@ export class UsuarioFormComponent implements OnInit {
           mae: usuario.mae,
           pai: usuario.pai,
         });
-      });
-      
     });
   }
 

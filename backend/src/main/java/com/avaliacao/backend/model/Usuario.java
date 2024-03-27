@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,7 +40,7 @@ public class Usuario {
     private SexoEnum sexo;
 
     @Column(nullable = false)
-    private LocalDate dataNascimento;
+    private Date dataNascimento;
 
     @ManyToOne
     private Usuario pai;

@@ -5,8 +5,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,7 +114,7 @@ public class UsuarioServiceTest {
   @Test(expected = ArgumentException.class)
   public void testUpdateWithExistingCPF() {
     UsuarioDto usuarioDto = buildUsuarioDto("João da Silva", CPF_NEW);
-    when(usuarioRepository.findByCpf(anyString())).thenReturn(buildUsuario(1L, "Maria", CPF_EXISTING));
+    when(usuarioRepository.findByCpf("")).thenReturn(buildUsuario(1L, "Maria", CPF_EXISTING));
 
     usuarioService.update(usuarioDto);
   }
@@ -129,7 +129,7 @@ public class UsuarioServiceTest {
   }
 
   private UsuarioDto buildUsuarioDto(String nome, String cpf) {
-    return new UsuarioDto(null, nome, cpf, SexoEnum.MASCULINO, LocalDate.now(), null, null);
+    return new UsuarioDto(null, nome, cpf, SexoEnum.MASCULINO, new Date(), null, null);
   }
 
   private Usuario buildUsuario(Long id, String nome, String cpf) {
@@ -137,7 +137,7 @@ public class UsuarioServiceTest {
         .id(id)
         .nome(nome)
         .cpf(cpf)
-        .dataNascimento(LocalDate.now())
+        .dataNascimento(new Date())
         .build();
   }
 }

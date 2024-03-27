@@ -22,8 +22,7 @@ export class UsuarioListComponent implements OnInit {
   sexoOptions = [ 
     { label: 'Todos', value: ''},
     { label: 'Feminino', value: 'Feminino' },
-    { label: 'Masculino', value: 'Masculino' },
-    { label: 'Outro', value: 'Outro' }
+    { label: 'Masculino', value: 'Masculino' }
   ];
   mostrarDetalhes: boolean = false;
   detalhe: Usuario;

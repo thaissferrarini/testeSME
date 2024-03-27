@@ -51,10 +51,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioDto update(UsuarioDto usuarioDto) {
-        validarCPF(usuarioDto.getCpf());
-        if (cpfExists(usuarioDto.getCpf()))
-            throw new ArgumentException("CPF já existe no sistema");
         Usuario usuario = usuarioRepository.findById(usuarioDto.getId()).get();
+        if(!usuario.getCpf().equals(usuarioDto.getCpf())) {
+            validarCPF(usuarioDto.getCpf());
+            if (cpfExists(usuarioDto.getCpf()))
+                throw new ArgumentException("CPF já existe no sistema");
+        }
         Usuario mae = findByNome(usuarioDto.getMae(), SexoEnum.FEMININO);
         Usuario pai = findByNome(usuarioDto.getPai(), SexoEnum.MASCULINO);
         usuario = EntityMapper.usuario(usuarioDto, mae, pai);
@@ -67,7 +69,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     private Usuario findByNome(String nome, SexoEnum sexo) {
-        if (usuarioRepository.count() == 0 || (nome == null && sexo == SexoEnum.MASCULINO))
+        if (usuarioRepository.count() == 0 || ((nome == null || nome == "")))
             return null;
 
         List<Usuario> usuarios = usuarioRepository.findByNomeAndSexo(nome, sexo);
