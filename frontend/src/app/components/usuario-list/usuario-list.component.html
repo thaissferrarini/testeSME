@@ -1,0 +1,103 @@
+<div>
+  <h2>Listagem de Usuários</h2>
+</div>
+
+<div class="card p-shadow-6">
+  <div style="padding: 1%;">
+    <div class="p-fluid">
+      <div class="p-field p-grid">
+        <form [formGroup]="formPesquisaUsuario">
+          <div class="p-grid">
+            <div class="p-col-12 p-md-3">
+              <input formControlName="nome" pInputText placeholder="Pesquisar Nome" (input)="filtrar()" />
+            </div>
+            <div class="p-col-12 p-md-3">
+              <input formControlName="cpf" pInputText placeholder="Pesquisar CPF" (input)="filtrar()" />
+            </div>
+            <div class="p-col-12 p-md-3">
+              <p-dropdown formControlName="sexo" [options]="sexoOptions" placeholder="Pesquisar Sexo" (onChange)="filtrar()"></p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-3">
+              <button pButton type="button" icon="pi pi-plus" label="Cadastro" routerLink="/criar" routerLinkActive="active"></button>
+            </div>
+          </div>
+        </form>
+        
+      </div>
+    </div>
+
+
+      <p-table [value]="usuariosFiltrados"
+        [tableStyle]="{ 'min-width': '50rem' }" >
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Nome</th>
+                  <th>Cpf</th>
+                  <th>Sexo</th>
+                  <th width="10px"></th>
+                  <th width="10px"></th>
+                  <th width="10px"></th>
+
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row>
+              <tr>
+                  <td>{{ row.nome }}</td>
+                  <td>{{ formatarCpf(row.cpf) }}</td>
+                  <td>{{ row.sexo }}</td>
+                  <td width="10px">
+                      <button pButton type="button" (click)="abrirDetalhes(row)"
+                          icon="pi pi-search"></button>
+                  </td>
+                  <td width="10px">
+                      <button pButton type="button" class="p-button-secondary"
+                          icon="pi pi-pencil" (click)="editar(row)"></button>
+                  </td>
+                  <td width="10px">
+                      <button pButton type="button" class="p-button-danger"
+                          icon="pi pi-trash" (click)="confirmarExclusao(row)"></button>
+                  </td>
+              </tr>
+          </ng-template>
+      </p-table>
+  </div>
+</div>
+
+<p-dialog [(visible)]="mostrarDetalhes" [modal]="true" [draggable]="false" [resizable]="false" [header]="detalhe?.nome">
+  <ng-template pTemplate="content">
+      <p-table [value]="[detalhe]" [style]="{ 'width': '100%' }" [scrollable]="true" [scrollHeight]="'500px'">
+          <ng-template pTemplate="body" let-detalhe>
+              <tr>
+                  <td><strong>CPF:</strong> {{ detalhe.cpf }}</td>
+              </tr>
+              <tr>
+                  <td><strong>Sexo:</strong> {{ detalhe.sexo }}</td>
+              </tr>
+              <tr>
+                  <td><strong>Data de Nascimento:</strong> {{ detalhe.dataNascimento | date: 'dd/MM/yyyy' }}</td>
+              </tr>
+              <tr>
+                  <td><strong>Nome da Mãe:</strong> {{ detalhe.mae.nome }}</td>
+              </tr>
+              <tr>
+                  <td><strong>Nome do Pai:</strong> {{ detalhe.pai?.nome || '' }}</td>
+              </tr>
+          </ng-template>
+      </p-table>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="exibirDialogoConfirmacao" [modal]="true" [draggable]="false" [resizable]="false">
+  <p-header>
+      <div class="ui-dialog-title">Confirmação de Exclusão</div>
+  </p-header>
+  <p-footer>
+      <button pButton type="button" label="Cancelar" (click)="cancelarExclusao()" class="p-button-secondary"></button>
+      <button pButton type="button" label="Excluir" (click)="excluir()" class="p-button-danger"></button>
+  </p-footer>
+  <ng-container *ngIf="usuarioParaExcluir">
+      <p>Tem certeza que deseja excluir o usuário {{ usuarioParaExcluir.nome }}?</p>
+  </ng-container>
+</p-dialog>
+
+<p-toast></p-toast>
