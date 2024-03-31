@@ -1,29 +1,29 @@
-# Use a imagem de node como base
-FROM node:14 as build
+# Estágio de construção
+FROM node:16 AS build
 
-# Defina o diretório de trabalho
+# Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copie o arquivo package.json para o diretório de trabalho
+# Copia o package.json e o package-lock.json para o diretório de trabalho
 COPY package.json package-lock.json ./
 
-# Instale as dependências
+# Instala as dependências do projeto
 RUN npm install
 
-# Copie os arquivos do projeto para o diretório de trabalho
+# Copia todos os arquivos do projeto para o diretório de trabalho
 COPY . .
 
-# Execute o build do Angular
-RUN npm run build
+# Executa o comando de build
+RUN npm run build --prod
 
-# Multi-stage build para criar uma imagem mais leve
+# Estágio de produção
 FROM nginx:alpine
 
-# Copie os arquivos de build do Angular para o diretório de trabalho do nginx
-COPY --from=build /app/dist/* /usr/share/nginx/html/
+# Copia os arquivos de build do estágio de construção para o diretório de Nginx
+COPY --from=build /app/dist/cadastro-pessoa /usr/share/nginx/html
 
-# Exponha a porta 80
+# Expondo a porta 80 para tráfego HTTP
 EXPOSE 80
 
-# Comando para iniciar o nginx
+# Comando para iniciar o servidor Nginx em segundo plano
 CMD ["nginx", "-g", "daemon off;"]

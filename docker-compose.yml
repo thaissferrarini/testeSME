@@ -1,30 +1,34 @@
 version: '3.4'
 
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
-
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: thaisferrarini1/teste-sme-back:1
     ports:
-      - 3000:3000
+      - 8080:8080
     depends_on:
       - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+    networks:
+      - sme_network
+    
+  frontend:
+    image: thaisferrarini1/teste-sme-front:1
+    ports:
+      - 80:80
+    depends_on:
+      - postgres
+    networks:
+      - sme_network
 
   postgres:
     image: postgres:15
-    volumes:
-      - C:\Users\felip\OneDrive\Área de Trabalho\thais\testeSME\data:/var/lib/postgresql/data/
     environment:
       POSTGRES_PASSWORD: "admin"
     ports:
       - "5432:5432"
+    networks:
+      - sme_network
 
+networks:
+  sme_network:
