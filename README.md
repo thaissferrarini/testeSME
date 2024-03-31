@@ -24,8 +24,8 @@ Execute o Docker Compose para iniciar os contêineres:
 
 docker-compose up
 
-Isso iniciará os contêineres do projeto Java e Angular. O front-end em `http://localhost:80` e o back-end está disponível `http://localhost:8080/swagger-ui.html/`.
+Isso iniciará os contêineres do projeto Java e Angular. O front-end em `http://localhost:80` e o back-end está disponível `http://localhost:8080/swagger-ui.html#/`.
 
 ## Parando os contêineres
 
-Para parar os contêineres, `docker-compose down`.
+Para parar os contêineres, pressione `Ctrl + C` no terminal onde o `docker-compose up` está rodando.
